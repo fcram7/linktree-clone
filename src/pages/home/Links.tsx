@@ -39,7 +39,7 @@ const Links = () => {
     <section className="links-section py-32 px-[7%] h-full flex lg:justify-center">
       <div className="links-content h-full w-full flex flex-col justify-center gap-4 lg:max-w-[50rem]">
         {loading ? 
-          <p>Loading...</p>
+          <p className="text-center">Loading...</p>
           : null
         }
         {links && links.map((link, index) => (

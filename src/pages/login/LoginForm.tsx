@@ -21,7 +21,7 @@ const LoginForm = () => {
       await login({
         email,
         password,
-      })
+      });
 
       return toast.success("Login Successful");
     } catch (error) {

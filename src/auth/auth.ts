@@ -12,6 +12,8 @@ export const login = async ({ email, password }: auth) => {
     password: password,
   })
 
+  console.log(data)
+
   return { data, error }
 }
 
