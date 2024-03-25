@@ -1,12 +1,22 @@
+import { FormEvent } from 'react';
+
 interface input {
   placeholder: string,
-  type: string
+  type: string,
+  value: string,
+  onChange: (e: FormEvent<HTMLInputElement>) => void,
 }
 
-const Input = ({ placeholder, type }: input) => {
+const Input = ({ placeholder, type, value, onChange }: input) => {
   return ( 
     <>
-      <input type={type} placeholder={placeholder} className="form-input px-3 py-4 rounded-xl border border-neutral-500"  />
+      <input 
+        type={type} 
+        placeholder={placeholder} 
+        value={value}
+        onChange={onChange}
+        className="form-input px-3 py-4 rounded-xl border border-neutral-500"
+      />
     </>
    );
 }
