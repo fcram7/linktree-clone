@@ -12,30 +12,34 @@ const RouteHandler = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const checkUserLoggedIn = async () => {
-      const session = await supabase.auth.getSession();
-      if(session) {
-        const { data: { user }} = await supabase.auth.getUser();
+    // const checkUserLoggedIn = async () => {
+    //   const session = await supabase.auth.getSession();
+    //   if(session) {
+    //     const { data: { user }} = await supabase.auth.getUser();
   
-        setLoggedInUser(user);
-      }
-    }
+    //     setLoggedInUser(user);
+    //   }
+    // }
 
-    checkUserLoggedIn();
+    // checkUserLoggedIn();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_e, session) => {
+      setLoggedInUser(session?.user ?? null)
+    });
+
+    return () => authListener.subscription.unsubscribe();
   }, [])
 
   return ( 
     <>
       <Routes>
         <Route  path="/" element={<Home />}/>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/signup" element={<SignUp />}/>
-        
         {loggedInUser ? (
-          <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="*" element={<Dashboard />}/>
         ) : (
           <>
             <Route path="*" element={<Login />}/>
+            <Route path="/signup" element={<SignUp />}/>
           </>
         )}
       </Routes>
