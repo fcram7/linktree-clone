@@ -2,7 +2,8 @@ import { supabase } from '../utils/supabase'
 
 interface auth {
   email: string,
-  password: string
+  password: string,
+  username?: string,
 }
 
 export const login = async ({ email, password }: auth) => {
@@ -14,12 +15,14 @@ export const login = async ({ email, password }: auth) => {
   return { data, error }
 }
 
-export const signUp = async ({ email, password }: auth) => {
+export const signUp = async ({ email, password, username }: auth) => {
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
     options: {
-      emailRedirectTo: "http://localhost:5173/login"
+      data: {
+        username: username
+      },
     }
   });
 
