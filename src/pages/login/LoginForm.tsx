@@ -25,7 +25,8 @@ const LoginForm = () => {
 
       return toast.success("Login Successful");
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      return toast.error(`Oops! there's something wrong ${error}`);
     } finally {
       navigate("/dashboard")
     }
