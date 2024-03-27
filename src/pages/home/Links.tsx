@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import LinkCard from '../../components/LinkCard';
 import Icons from '../../components/Icons';
 
-import getLinksData from '../../db/db';
+import { getLinksData } from '../../db/db';
 import { FaFontAwesome } from 'react-icons/fa';
 
 interface Link {

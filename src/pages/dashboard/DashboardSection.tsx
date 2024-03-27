@@ -3,7 +3,7 @@ import { FaFontAwesome } from 'react-icons/fa';
 import { FaPlus } from "react-icons/fa6";
 
 import DashboardCard from './components/DashboardCard';
-import getLinksData from '../../db/db';
+import { getLinksData } from '../../db/db';
 import LinkCard from '../../components/LinkCard';
 import Icons from '../../components/Icons';
 import Modal from './components/Modal';
@@ -11,7 +11,7 @@ import Modal from './components/Modal';
 interface links {
   title: string,
   icon: string,
-  url: string,
+  url?: string,
 }
 
 const DashboardSection = () => {
@@ -37,7 +37,13 @@ const DashboardSection = () => {
 
   const modalClickHandler = () => {
     setModal((prevState) => !prevState);
+    if(!modal) {
+      document.body.style.backgroundColor = "rgb(1, 1, 1, 0.3)";
+    } else {
+      document.body.style.backgroundColor = "";
+    }
   }
+
 
   return ( 
     <section className="dashboard-section py-32 px-[7%] h-full">
@@ -55,12 +61,12 @@ const DashboardSection = () => {
               : null
             }
             {links && links.map((link, index) => (
-              <LinkCard key={index} linkIcon={<Icons iconName={link?.icon as keyof typeof FaFontAwesome} />} linkText={link?.title} linkUrl={link?.url}/>
+              <LinkCard key={index} linkIcon={<Icons iconName={link?.icon as keyof typeof FaFontAwesome } />} linkText={link?.title} linkUrl={link?.url}/>
             ))}
           </div>
         </div>
 
-        <button onClick={modalClickHandler} className="fixed bottom-8 right-16 p-4 bg-neutral-700 border rounded-full 
+        <button title="Add New Link Button" onClick={modalClickHandler} className="fixed bottom-8 right-16 p-4 bg-neutral-700 border rounded-full 
         text-2xl text-neutral-300 transition ease-in-out duration-300 hover:bg-neutral-100 
         hover:text-neutral-700 hover:border-neutral-600">
           <FaPlus />

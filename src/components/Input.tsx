@@ -15,7 +15,7 @@ const Input = ({ placeholder, type, value, onChange }: input) => {
         placeholder={placeholder} 
         value={value}
         onChange={onChange}
-        className="form-input px-3 py-4 rounded-xl border border-neutral-500"
+        className="form-input px-3 py-4 rounded-xl border border-neutral-500 focus:outline-sky-600"
       />
     </>
    );

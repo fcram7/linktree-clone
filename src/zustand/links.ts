@@ -15,7 +15,7 @@ interface linksAction {
 const useLinksStore = create<links & linksAction> ((set) => ({
   title: "",
   url: "",
-  icon: "",
+  icon: "FaRegCircle",
   setTitle: (title) => set(() => ({ title: title })),
   setUrl: (url) => set(() => ({ url: url })),
   setIcon: (icon) => set(() => ({ icon: icon })),
