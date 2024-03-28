@@ -3,15 +3,17 @@ import { FaFontAwesome } from 'react-icons/fa';
 import { FaPlus } from "react-icons/fa6";
 
 import DashboardCard from './components/DashboardCard';
-import { getLinksData } from '../../db/db';
-import LinkCard from '../../components/LinkCard';
+import { deleteLinksData, getLinksData } from '../../db/db';
 import Icons from '../../components/Icons';
 import Modal from './components/Modal';
+import DashboardLinkCard from './components/DashboardLinkCard';
+import toast from 'react-hot-toast';
 
 interface links {
+  id: number,
   title: string,
   icon: string,
-  url?: string,
+  url: string,
 }
 
 const DashboardSection = () => {
@@ -20,7 +22,7 @@ const DashboardSection = () => {
   const [links, setLinks] = useState<links[] | null>(null);
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(prevLoading => !prevLoading);
     const data = async () => {
       try {
         const linksData = await getLinksData();
@@ -36,11 +38,35 @@ const DashboardSection = () => {
   }, []);
 
   const modalClickHandler = () => {
-    setModal((prevState) => !prevState);
+    setModal((prevModal) => !prevModal);
     if(!modal) {
       document.body.style.backgroundColor = "rgb(1, 1, 1, 0.3)";
     } else {
       document.body.style.backgroundColor = "";
+    }
+  }
+
+  // const closeModal = () => {
+  //   modalClickHandler();
+  // }
+
+  const onDeleteHandler = async (id: number, title: string) => {
+    try {
+      await deleteLinksData(id);
+      const updatedLinksData = await getLinksData(); 
+      setLinks(updatedLinksData);
+      return toast.success(`Successfully deleted ${title}`);
+    } catch (error) {
+      console.error(error)
+      return toast.error(`Oops! there's an error ${error}`);
+    }
+  }
+
+  const modalArea = document.querySelector("#addLinkModal");
+  window.onclick = (e: Event) => {
+    const target = e.target as Node;
+    if (target === modalArea) {
+      setModal((prevModal) => !prevModal);
     }
   }
 
@@ -60,8 +86,16 @@ const DashboardSection = () => {
               <p className="text-center">Loading...</p>
               : null
             }
-            {links && links.map((link, index) => (
-              <LinkCard key={index} linkIcon={<Icons iconName={link?.icon as keyof typeof FaFontAwesome } />} linkText={link?.title} linkUrl={link?.url}/>
+            {links && links.map((link) => (
+              <DashboardLinkCard 
+                key={link.id}
+                onDelete={() => {
+                  onDeleteHandler(link!.id, link!.title)}
+                }
+                url={link?.url}
+                title={link?.title}
+                icon={<Icons iconName={link?.icon as keyof typeof FaFontAwesome}/>}
+              />
             ))}
           </div>
         </div>

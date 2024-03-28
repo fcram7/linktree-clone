@@ -54,6 +54,7 @@ const Modal = ({ onClick }: modal) => {
 
     try {
       await addLinksData({ title, url, icon });
+      window.location.reload();
       return toast.success(`Successfully added ${title} link`);
     } catch (error) {
       console.error(error);
@@ -63,13 +64,13 @@ const Modal = ({ onClick }: modal) => {
 
   return ( 
     <>
-      <div className="modal fixed top-[20%] left-0 right-0 w-[86%] h-[65%] mx-[7%] bg-neutral-100 border 
-        border-neutral-700 rounded-3xl md:w-[60%] md:left-[13%] lg:w-[50%] lg:left-[18%]"
+      <div id="addLinkModal" className={`modal fixed block top-[20%] left-0 right-0 w-[86%] h-[65%] mx-[7%] bg-neutral-100 border 
+        border-neutral-700 rounded-3xl md:w-[60%] md:left-[13%] lg:w-[50%] lg:left-[18%]`}
       >
         <button onClick={onClick} className="close-button absolute right-5 top-4 text-2xl">
           <MdClose />
         </button>
-        <div className="px-8 pt-4">
+        <div className="px-8 pt-4 w-100">
           <h1 className="text-center text-2xl mb-6">Add Your Link</h1>
           <form onSubmit={onSubmitHandler} action="" className="flex flex-col gap-3">
             <label htmlFor="">Title</label>

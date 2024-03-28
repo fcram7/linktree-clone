@@ -18,3 +18,9 @@ export const addLinksData = async ({ title, url, icon }: linksData) => {
   return data;
 }
 
+export const deleteLinksData = async (id: number) => {
+  const { error } = await supabase.from("links").delete().eq("id", id);
+
+  return error;
+}
+

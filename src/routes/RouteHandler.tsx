@@ -35,7 +35,7 @@ const RouteHandler = () => {
       <Routes>
         <Route  path="/" element={<Home />}/>
         {loggedInUser ? (
-          <Route path="*" element={<Dashboard />}/>
+          <Route path="/dashboard" element={<Dashboard />}/>
         ) : (
           <>
             <Route path="*" element={<Login />}/>
