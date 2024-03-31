@@ -38,6 +38,14 @@ const Modal = ({ onClick }: modal) => {
     {
       value: "FaYoutube",
       option: "Youtube"
+    },
+    {
+      value: "FaShoppingBag",
+      option: "Shop,"
+    },
+    {
+      value: "FaLocationDot",
+      option: "Location",
     }
   ]
 

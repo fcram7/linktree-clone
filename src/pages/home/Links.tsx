@@ -22,8 +22,15 @@ const Links = () => {
       setLoading(true);
 
       try {
-        const linksData = await getLinksData();
-        setLinks(linksData);
+        const { data: linksData, error } = await getLinksData();
+
+        if (error) {
+          console.error(error)
+        } else if (Array.isArray(linksData)) {
+          setLinks(linksData);
+        } else {
+          console.error(`Unexpected data format ${linksData}`);
+        }
         
       } catch (error) {
         console.error(error)

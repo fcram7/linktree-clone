@@ -25,8 +25,15 @@ const DashboardSection = () => {
     setLoading(prevLoading => !prevLoading);
     const data = async () => {
       try {
-        const linksData = await getLinksData();
-        setLinks(linksData);
+        const { data: linksData, error } = await getLinksData();
+
+        if (error) {
+          console.error(error);
+        } else if (Array.isArray(linksData)) {
+          setLinks(linksData);
+        } else {
+          console.error(`Unexpected data format ${linksData}`);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -53,8 +60,15 @@ const DashboardSection = () => {
   const onDeleteHandler = async (id: number, title: string) => {
     try {
       await deleteLinksData(id);
-      const updatedLinksData = await getLinksData(); 
-      setLinks(updatedLinksData);
+      const { data: updatedLinksData, error } = await getLinksData();
+      if (error) {
+        console.error(error);
+      } else if (Array.isArray(updatedLinksData)) {
+        setLinks(updatedLinksData);
+      } else {
+        console.error(`Unexpected data type ${updatedLinksData}`)
+      }
+      
       return toast.success(`Successfully deleted ${title}`);
     } catch (error) {
       console.error(error)

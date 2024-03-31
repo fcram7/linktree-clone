@@ -3,19 +3,26 @@ import { supabase } from '../utils/supabase';
 interface linksData {
   title: string,
   url: string,
-  icon: string
+  icon: string,
+  id?: number,
 }
 
 export const getLinksData = async () => {
-  const { data } = await supabase.from("links").select();
+  const { data, error } = await supabase.from("links").select();
 
-  return data;
+  return { data, error };
 }
 
 export const addLinksData = async ({ title, url, icon }: linksData) => {
-  const { data } = await supabase.from("links").insert({ title, url, icon });
+  const { data, error } = await supabase.from("links").insert({ title, url, icon });
 
-  return data;
+  return { data, error };
+}
+
+export const editLinksData = async ({ id, title, url, icon }: linksData) => {
+  const { error } = await supabase.from("links").update({ title, url, icon }).eq("id", id)
+
+  return error;
 }
 
 export const deleteLinksData = async (id: number) => {
