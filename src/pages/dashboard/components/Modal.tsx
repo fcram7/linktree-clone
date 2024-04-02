@@ -60,27 +60,6 @@ const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon,
     }
   ]
 
-  // const onSubmitHandler = async (e: FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!title || !url) {
-  //     setFormError("Please fill the form correctly");
-  //   }
-
-  //   console.log(title);
-  //   console.log(url);
-  //   console.log(icon);
-
-  //   try {
-  //     await addLinksData({ title, url, icon });
-  //     window.location.reload();
-  //     return toast.success(`Successfully added ${title} link`);
-  //   } catch (error) {
-  //     console.error(error);
-  //     return toast.error(`Oops! there's an error ${error}`);
-  //   }
-  // }
-
   return ( 
     <>
       <div id="addLinkModal" className={`modal fixed block top-[20%] left-0 right-0 w-[86%] h-[65%] mx-[7%] bg-neutral-100 border 

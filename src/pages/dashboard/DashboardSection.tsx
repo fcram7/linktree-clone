@@ -72,10 +72,6 @@ const DashboardSection = () => {
       setFormError("Please fill the form correctly");
     }
 
-    console.log(title);
-    console.log(url);
-    console.log(icon);
-
     try {
       await editLinksData({ id, title, url, icon });
       setEdit(false);
@@ -99,10 +95,6 @@ const DashboardSection = () => {
     if (!title || !url) {
       setFormError("Please fill the form correctly");
     }
-
-    console.log(title);
-    console.log(url);
-    console.log(icon);
 
     try {
       await addLinksData({ title, url, icon });
@@ -207,7 +199,7 @@ const DashboardSection = () => {
       /> : 
       null}
     </section>
-   );
+  );
 }
- 
+
 export default DashboardSection;
