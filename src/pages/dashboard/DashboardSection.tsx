@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { FaFontAwesome } from 'react-icons/fa';
 import { FaPlus } from "react-icons/fa6";
 
 import DashboardCard from './components/DashboardCard';
-import { deleteLinksData, getLinksData } from '../../db/db';
+import { addLinksData, deleteLinksData, editLinksData, getLinksData } from '../../db/db';
 import Icons from '../../components/Icons';
 import Modal from './components/Modal';
 import DashboardLinkCard from './components/DashboardLinkCard';
 import toast from 'react-hot-toast';
+import useLinksStore from '../../zustand/links';
 
 interface links {
   id: number,
@@ -19,7 +20,11 @@ interface links {
 const DashboardSection = () => {
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const [formError, setFormError] = useState("");
   const [links, setLinks] = useState<links[] | null>(null);
+  const [linkId, setLinkId] = useState<number | null>(null);
+
+  const { title, url, icon, edit, setTitle, setUrl, setIcon, setEdit } = useLinksStore();
 
   useEffect(() => {
     setLoading(prevLoading => !prevLoading);
@@ -44,18 +49,54 @@ const DashboardSection = () => {
     data();
   }, []);
 
+  let linkToEdit = links ? links.find(link => link.id === linkId) : null;
+  
   const modalClickHandler = () => {
     setModal((prevModal) => !prevModal);
     if(!modal) {
       document.body.style.backgroundColor = "rgb(1, 1, 1, 0.3)";
     } else {
       document.body.style.backgroundColor = "";
+      setEdit(false);
+      linkToEdit = null;
     }
   }
 
-  // const closeModal = () => {
-  //   modalClickHandler();
-  // }
+
+  console.log(edit);
+
+  const onSubmitHandler = async (e: FormEvent, id?: number) => {
+    e.preventDefault();
+
+    if (!title || !url) {
+      setFormError("Please fill the form correctly");
+    }
+
+    console.log(title);
+    console.log(url);
+    console.log(icon);
+
+    if (edit) {
+      try {
+        await editLinksData({ id, title, url, icon });
+        window.location.reload();
+        setEdit(false);
+        return toast.success(`Successfully edited ${title} link`);
+      } catch (error) {
+        console.error(error);
+        return toast.error(`Oops! there's an error ${error}`);
+      }
+    }
+
+    try {
+      await addLinksData({ title, url, icon });
+      window.location.reload();
+      return toast.success(`Successfully added ${title} link`);
+    } catch (error) {
+      console.error(error);
+      return toast.error(`Oops! there's an error ${error}`);
+    }
+  }
 
   const onDeleteHandler = async (id: number, title: string) => {
     try {
@@ -68,7 +109,7 @@ const DashboardSection = () => {
       } else {
         console.error(`Unexpected data type ${updatedLinksData}`)
       }
-      
+
       return toast.success(`Successfully deleted ${title}`);
     } catch (error) {
       console.error(error)
@@ -103,6 +144,11 @@ const DashboardSection = () => {
             {links && links.map((link) => (
               <DashboardLinkCard 
                 key={link.id}
+                onSelect={() => {
+                  setEdit(true)
+                  setLinkId(link.id)
+                  modalClickHandler()
+                }}
                 onDelete={() => {
                   onDeleteHandler(link!.id, link!.title)}
                 }
@@ -120,7 +166,18 @@ const DashboardSection = () => {
           <FaPlus />
         </button>
       </div>
-      {modal ? <Modal onClick={modalClickHandler}/> : null}
+      {modal ? 
+      <Modal
+        edit={edit}
+        linkToEdit={linkToEdit}
+        setTitle={(e) => setTitle(e.currentTarget.value)}
+        setUrl={(e) => setUrl(e.currentTarget.value)}
+        setIcon={(e) => setIcon(e.currentTarget.value)}
+        formError={formError}
+        onClick={modalClickHandler}
+        onSubmitHandler={(e) => onSubmitHandler(e, linkToEdit!.id)}
+      /> : 
+      null}
     </section>
    );
 }

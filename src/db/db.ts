@@ -20,9 +20,9 @@ export const addLinksData = async ({ title, url, icon }: linksData) => {
 }
 
 export const editLinksData = async ({ id, title, url, icon }: linksData) => {
-  const { error } = await supabase.from("links").update({ title, url, icon }).eq("id", id)
+  const { data, error } = await supabase.from("links").update({ title, url, icon }).eq("id", id)
 
-  return error;
+  return { data, error };
 }
 
 export const deleteLinksData = async (id: number) => {

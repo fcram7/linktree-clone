@@ -1,12 +1,27 @@
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { MdClose } from "react-icons/md";
 import Input from '../../../components/Input';
 import useLinksStore from '../../../zustand/links';
-import { addLinksData } from '../../../db/db';
-import toast from 'react-hot-toast';
 
 interface modal {
   onClick: () => void,
+  onSubmitHandler: (e: FormEvent) => void,
+  setTitle: (e: ChangeEvent<HTMLInputElement>) => void,
+  setUrl: (e: ChangeEvent<HTMLInputElement>) => void,
+  setIcon: (e: ChangeEvent<HTMLSelectElement>) => void,
+  formError: string,
+  edit: boolean,
+  linkToEdit: Link | null | undefined,
+  // title: string,
+  // url: string,
+  // icon: string,
+}
+
+interface Link {
+  id: number;
+  title: string;
+  url: string;
+  icon: string;
 }
 
 interface options {
@@ -14,9 +29,8 @@ interface options {
   option: string
 }
 
-const Modal = ({ onClick }: modal) => {
-  const { title, url, icon, setTitle, setUrl, setIcon } = useLinksStore();
-  const [formError, setFormError] = useState("");
+const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon, edit, linkToEdit }: modal) => {
+  const { title, url, icon } = useLinksStore()
 
   const options: options[] = [
     {
@@ -41,7 +55,7 @@ const Modal = ({ onClick }: modal) => {
     },
     {
       value: "FaShoppingBag",
-      option: "Shop,"
+      option: "Shop"
     },
     {
       value: "FaLocationDot",
@@ -49,26 +63,26 @@ const Modal = ({ onClick }: modal) => {
     }
   ]
 
-  const onSubmitHandler = async (e: FormEvent) => {
-    e.preventDefault();
+  // const onSubmitHandler = async (e: FormEvent) => {
+  //   e.preventDefault();
 
-    if (!title || !url) {
-      setFormError("Please fill the form correctly");
-    }
+  //   if (!title || !url) {
+  //     setFormError("Please fill the form correctly");
+  //   }
 
-    console.log(title);
-    console.log(url);
-    console.log(icon);
+  //   console.log(title);
+  //   console.log(url);
+  //   console.log(icon);
 
-    try {
-      await addLinksData({ title, url, icon });
-      window.location.reload();
-      return toast.success(`Successfully added ${title} link`);
-    } catch (error) {
-      console.error(error);
-      return toast.error(`Oops! there's an error ${error}`);
-    }
-  }
+  //   try {
+  //     await addLinksData({ title, url, icon });
+  //     window.location.reload();
+  //     return toast.success(`Successfully added ${title} link`);
+  //   } catch (error) {
+  //     console.error(error);
+  //     return toast.error(`Oops! there's an error ${error}`);
+  //   }
+  // }
 
   return ( 
     <>
@@ -82,21 +96,18 @@ const Modal = ({ onClick }: modal) => {
           <h1 className="text-center text-2xl mb-6">Add Your Link</h1>
           <form onSubmit={onSubmitHandler} action="" className="flex flex-col gap-3">
             <label htmlFor="">Title</label>
-            <Input placeholder="Title" onChange={(e) => setTitle(e.currentTarget.value)} value={title} type="text"/>
+            <Input placeholder={edit && linkToEdit ? `Current title: ${linkToEdit.title}` : "Title"} onChange={setTitle} value={title} type="text"/>
             <label htmlFor="">URL</label>
-            <Input placeholder="URL" onChange={(e) => setUrl(e.currentTarget.value)} value={url} type="text"/>
+            <Input placeholder={edit && linkToEdit ? `Current title: ${linkToEdit.url}` : "URL"} onChange={setUrl} value={url} type="text"/>
             <label htmlFor="">Icon</label>
-            <select onChange={(e) => {
-              console.log(e)
-              setIcon(e.currentTarget.value)
-            }} className="px-2 py-3 border rounded-lg border-neutral-700 focus:border-sky-600" name="" id="">
+            <select value={icon} onChange={setIcon} className="px-2 py-3 border rounded-lg border-neutral-700 focus:border-sky-600" name="" id="">
               {options.map((option, index) => (
                 <option key={index} value={option.value}>{option.option}</option>
               ))}
             </select>
 
             <p className="text-red-600">{formError}</p>
-            <button title="Submit New Link Button" className="bg-neutral-600 transition ease-in-out duration-300 hover:bg-neutral-500 w-[100%] py-2 px-4 mt-4 text-slate-100 rounded-lg">Add Link</button>
+            <button title="Submit New Link Button" className="bg-neutral-600 transition ease-in-out duration-300 hover:bg-neutral-500 w-[100%] py-2 px-4 mt-4 text-slate-100 rounded-lg">{edit && linkToEdit ? "Edit Link" : "Add Link"}</button>
           </form>
         </div>
       </div>
