@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { FaFontAwesome } from 'react-icons/fa';
 import { FaPlus } from "react-icons/fa6";
 
@@ -65,8 +65,8 @@ const DashboardSection = () => {
 
   console.log(edit);
 
-  const onSubmitHandler = async (e: FormEvent, id?: number) => {
-    e.preventDefault();
+  const editDataHandler = async (id?: number) => {
+    
 
     if (!title || !url) {
       setFormError("Please fill the form correctly");
@@ -76,27 +76,52 @@ const DashboardSection = () => {
     console.log(url);
     console.log(icon);
 
-    if (edit) {
-      try {
-        await editLinksData({ id, title, url, icon });
-        window.location.reload();
-        setEdit(false);
-        return toast.success(`Successfully edited ${title} link`);
-      } catch (error) {
-        console.error(error);
-        return toast.error(`Oops! there's an error ${error}`);
-      }
-    }
-
     try {
-      await addLinksData({ title, url, icon });
-      window.location.reload();
-      return toast.success(`Successfully added ${title} link`);
+      await editLinksData({ id, title, url, icon });
+      setEdit(false);
+      const { data: updatedLinksData, error } = await getLinksData();
+      if (error) {
+        console.error(error);
+      } else if (Array.isArray(updatedLinksData)) {
+        setLinks(updatedLinksData);
+      } else {
+        console.error(`Unexpected data type ${updatedLinksData}`)
+      }
+      return toast.success(`Successfully edited ${title} link`);
     } catch (error) {
       console.error(error);
       return toast.error(`Oops! there's an error ${error}`);
     }
   }
+
+  const addDataHandler = async () => {
+
+    if (!title || !url) {
+      setFormError("Please fill the form correctly");
+    }
+
+    console.log(title);
+    console.log(url);
+    console.log(icon);
+
+    try {
+      await addLinksData({ title, url, icon });
+      const { data: updatedLinksData, error } = await getLinksData();
+      if (error) {
+        console.error(error);
+      } else if (Array.isArray(updatedLinksData)) {
+        setLinks(updatedLinksData);
+        setModal((prevModal) => !prevModal);
+        document.body.style.backgroundColor = "";
+      } else {
+        console.error(`Unexpected data type ${updatedLinksData}`)
+      }
+      return toast.success(`Successfully added ${title} link`);
+    } catch (error) {
+      console.error(error);
+      return toast.error(`Oops! there's an error ${error}`);
+    }
+  } 
 
   const onDeleteHandler = async (id: number, title: string) => {
     try {
@@ -175,7 +200,10 @@ const DashboardSection = () => {
         setIcon={(e) => setIcon(e.currentTarget.value)}
         formError={formError}
         onClick={modalClickHandler}
-        onSubmitHandler={(e) => onSubmitHandler(e, linkToEdit!.id)}
+        onSubmitHandler={(e) => {
+          e.preventDefault();
+          edit && linkToEdit ? editDataHandler(linkToEdit?.id) : addDataHandler()
+        }}
       /> : 
       null}
     </section>

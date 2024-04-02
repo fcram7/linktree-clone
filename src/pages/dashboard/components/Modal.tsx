@@ -12,9 +12,6 @@ interface modal {
   formError: string,
   edit: boolean,
   linkToEdit: Link | null | undefined,
-  // title: string,
-  // url: string,
-  // icon: string,
 }
 
 interface Link {
@@ -58,7 +55,7 @@ const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon,
       option: "Shop"
     },
     {
-      value: "FaLocationDot",
+      value: "FaMapMarkerAlt",
       option: "Location",
     }
   ]
@@ -93,7 +90,7 @@ const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon,
           <MdClose />
         </button>
         <div className="px-8 pt-4 w-100">
-          <h1 className="text-center text-2xl mb-6">Add Your Link</h1>
+          <h1 className="text-center text-2xl mb-6">{edit && linkToEdit ? "Edit Your Link" : "Add Your Link"}</h1>
           <form onSubmit={onSubmitHandler} action="" className="flex flex-col gap-3">
             <label htmlFor="">Title</label>
             <Input placeholder={edit && linkToEdit ? `Current title: ${linkToEdit.title}` : "Title"} onChange={setTitle} value={title} type="text"/>
