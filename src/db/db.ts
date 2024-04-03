@@ -5,28 +5,30 @@ interface linksData {
   url: string,
   icon: string,
   id?: number,
+  user_id: string
 }
 
 export const getLinksData = async () => {
-  const { data, error } = await supabase.from("links").select();
+  // const { data, error } = await supabase.from("links").select();
+  const { data, error } = await supabase.from("links_new").select("user_id, icon, title, url, id");
 
   return { data, error };
 }
 
-export const addLinksData = async ({ title, url, icon }: linksData) => {
-  const { data, error } = await supabase.from("links").insert({ title, url, icon });
+export const addLinksData = async ({ title, url, icon, user_id }: linksData) => {
+  const { data, error } = await supabase.from("links_new").insert([{ title: title, url: url, icon: icon, user_id:user_id }]).select();
 
   return { data, error };
 }
 
 export const editLinksData = async ({ id, title, url, icon }: linksData) => {
-  const { data, error } = await supabase.from("links").update({ title, url, icon }).eq("id", id)
+  const { data, error } = await supabase.from("links_new").update({ title, url, icon }).eq("id", id)
 
   return { data, error };
 }
 
 export const deleteLinksData = async (id: number) => {
-  const { error } = await supabase.from("links").delete().eq("id", id);
+  const { error } = await supabase.from("links_new").delete().eq("id" && "userId", id);
 
   return error;
 }

@@ -10,7 +10,7 @@ import { FaFontAwesome } from 'react-icons/fa';
 interface Link {
   icon: string,
   title: string,
-  url: string
+  url: string,
 }
 
 const Links = () => {
@@ -47,7 +47,7 @@ const Links = () => {
       <div className="links-content h-full w-full flex flex-col justify-center gap-4 lg:max-w-[50rem]">
         {loading ? 
           <p className="text-center">Loading...</p>
-          : null
+          : <p className="text-center">No Data</p>
         }
         {links && links.map((link, index) => (
           <LinkCard key={index} linkIcon={<Icons iconName={link?.icon as keyof typeof FaFontAwesome} />} linkText={link?.title} linkUrl={link?.url}/>

@@ -9,6 +9,7 @@ import Modal from './components/Modal';
 import DashboardLinkCard from './components/DashboardLinkCard';
 import toast from 'react-hot-toast';
 import useLinksStore from '../../zustand/links';
+import { supabase } from '../../utils/supabase';
 
 interface links {
   id: number,
@@ -63,7 +64,7 @@ const DashboardSection = () => {
   }
 
 
-  console.log(edit);
+  // console.log(edit);
 
   const editDataHandler = async (id?: number) => {
     
@@ -96,8 +97,10 @@ const DashboardSection = () => {
       setFormError("Please fill the form correctly");
     }
 
+    const userId = (await supabase.auth.getSession()).data.session!.user.id;
+
     try {
-      await addLinksData({ title, url, icon });
+      await addLinksData({ title, url, icon, user_id: userId });
       const { data: updatedLinksData, error } = await getLinksData();
       if (error) {
         console.error(error);
