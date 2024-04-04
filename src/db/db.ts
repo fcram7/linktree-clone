@@ -8,9 +8,9 @@ interface linksData {
   user_id: string
 }
 
-export const getLinksData = async () => {
-  // const { data, error } = await supabase.from("links").select();
-  const { data, error } = await supabase.from("links_new").select("user_id, icon, title, url, id");
+export const getLinksData = async (user_id: string) => {
+  // const { data, error } = await supabase.from("links_new").select("user_id, icon, title, url, id");
+  const { data, error } = await supabase.from("links_new").select("*").eq("user_id", user_id);
 
   return { data, error };
 }

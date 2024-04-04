@@ -16,6 +16,7 @@ interface links {
   title: string,
   icon: string,
   url: string,
+  user_id: string,
 }
 
 const DashboardSection = () => {
@@ -30,8 +31,10 @@ const DashboardSection = () => {
   useEffect(() => {
     setLoading(prevLoading => !prevLoading);
     const data = async () => {
+      const userId = (await supabase.auth.getSession()).data.session!.user.id;
+
       try {
-        const { data: linksData, error } = await getLinksData();
+        const { data: linksData, error } = await getLinksData(userId);
 
         if (error) {
           console.error(error);
@@ -78,7 +81,7 @@ const DashboardSection = () => {
     try {
       await editLinksData({ id, title, url, icon, user_id: userId });
       setEdit(false);
-      const { data: updatedLinksData, error } = await getLinksData();
+      const { data: updatedLinksData, error } = await getLinksData(userId);
       if (error) {
         console.error(error);
       } else if (Array.isArray(updatedLinksData)) {
@@ -103,7 +106,7 @@ const DashboardSection = () => {
 
     try {
       await addLinksData({ title, url, icon, user_id: userId });
-      const { data: updatedLinksData, error } = await getLinksData();
+      const { data: updatedLinksData, error } = await getLinksData(userId);
       if (error) {
         console.error(error);
       } else if (Array.isArray(updatedLinksData)) {
@@ -121,9 +124,11 @@ const DashboardSection = () => {
   } 
 
   const onDeleteHandler = async (id: number, title: string) => {
+    const userId = (await supabase.auth.getSession()).data.session!.user.id;
+
     try {
       await deleteLinksData(id);
-      const { data: updatedLinksData, error } = await getLinksData();
+      const { data: updatedLinksData, error } = await getLinksData(userId);
       if (error) {
         console.error(error);
       } else if (Array.isArray(updatedLinksData)) {
