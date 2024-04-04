@@ -16,13 +16,13 @@ export const getLinksData = async () => {
 }
 
 export const addLinksData = async ({ title, url, icon, user_id }: linksData) => {
-  const { data, error } = await supabase.from("links_new").insert([{ title: title, url: url, icon: icon, user_id:user_id }]).select();
+  const { data, error } = await supabase.from("links_new").insert([{ title: title, url: url, icon: icon, user_id: user_id }]).select();
 
   return { data, error };
 }
 
-export const editLinksData = async ({ id, title, url, icon }: linksData) => {
-  const { data, error } = await supabase.from("links_new").update({ title, url, icon }).eq("id", id)
+export const editLinksData = async ({ id, title, url, icon, user_id }: linksData) => {
+  const { data, error } = await supabase.from("links_new").update({ title: title, url: url, icon: icon, user_id: user_id }).eq("id", id).select();
 
   return { data, error };
 }

@@ -73,8 +73,10 @@ const DashboardSection = () => {
       setFormError("Please fill the form correctly");
     }
 
+    const userId = (await supabase.auth.getSession()).data.session!.user.id;
+
     try {
-      await editLinksData({ id, title, url, icon });
+      await editLinksData({ id, title, url, icon, user_id: userId });
       setEdit(false);
       const { data: updatedLinksData, error } = await getLinksData();
       if (error) {

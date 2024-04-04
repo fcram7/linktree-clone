@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <main className="h-dvh">
+      <main className="h-full bg-amber-100">
         <RouteHandler />
       </main>
     </>

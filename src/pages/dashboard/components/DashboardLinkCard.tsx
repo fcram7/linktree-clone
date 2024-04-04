@@ -20,7 +20,7 @@ const DashboardLinkCard = ({ icon, title, url, onSelect, onDelete }: links) => {
   }
   return ( 
     <>
-      <article className="dashboard-link-card w-full px-5 py-4 border border-neutral-300 shadow-lg bg-slate-100 rounded-xl">
+      <article className="dashboard-link-card w-full px-5 py-4 border border-neutral-300 shadow-lg bg-stone-100 rounded-xl">
         <div onMouseOver={onHoverHandler} onMouseOut={onHoverHandler} className="dashboard-link-card-container flex items-center justify-between">
           <div className="dashboard-link-card-content grid grid-rows-2 grid-flow-col w-fit gap-x-6 gap-y-2 items-center">
             <div className="w-fit row-span-2 col-span-1 text-3xl text-neutral-500">{icon}</div>
