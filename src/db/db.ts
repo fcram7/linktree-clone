@@ -5,14 +5,19 @@ interface linksData {
   url: string,
   icon: string,
   id?: number,
-  user_id: string
+  user_id: string | undefined
 }
 
 export const getLinksData = async (user_id: string) => {
-  // const { data, error } = await supabase.from("links_new").select("user_id, icon, title, url, id");
   const { data, error } = await supabase.from("links_new").select("*").eq("user_id", user_id);
 
   return { data, error };
+}
+
+export const getGeneratedLinksData = async () => {
+  const { data: generatedLinks, error: generatedLinksError } = await supabase.from("links_new").select("id, title, url, icon");
+
+  return { data: generatedLinks, error: generatedLinksError}
 }
 
 export const addLinksData = async ({ title, url, icon, user_id }: linksData) => {
@@ -28,8 +33,7 @@ export const editLinksData = async ({ id, title, url, icon, user_id }: linksData
 }
 
 export const deleteLinksData = async (id: number) => {
-  const { error } = await supabase.from("links_new").delete().eq("id" && "userId", id);
+  const { error } = await supabase.from("links_new").delete().eq("id", id);
 
   return error;
 }
-

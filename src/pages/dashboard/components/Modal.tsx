@@ -43,12 +43,16 @@ const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon,
       option: "Github"
     },
     {
-      value: "FaLinkedIn",
+      value: "FaLinkedin",
       option: "LinkedIn"
     },
     {
       value: "FaYoutube",
       option: "Youtube"
+    },
+    {
+      value: "FaCode",
+      option: "Code / Projects"
     },
     {
       value: "FaShoppingBag",
@@ -63,7 +67,7 @@ const Modal = ({ onClick, onSubmitHandler, formError, setTitle, setUrl, setIcon,
   return ( 
     <>
       <div id="addLinkModal" className={`modal fixed block top-[20%] left-0 right-0 w-[86%] h-[65%] mx-[7%] bg-neutral-100 border 
-        border-neutral-700 rounded-3xl md:w-[60%] md:left-[13%] lg:w-[50%] lg:left-[18%]`}
+        border-neutral-700 rounded-3xl md:w-[60%] md:left-[13%] lg:w-[50%] lg:left-[18%] shadow-2xl`}
       >
         <button onClick={onClick} className="close-button absolute right-5 top-4 text-2xl">
           <MdClose />

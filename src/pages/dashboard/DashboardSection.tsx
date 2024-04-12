@@ -10,6 +10,7 @@ import DashboardLinkCard from './components/DashboardLinkCard';
 import toast from 'react-hot-toast';
 import useLinksStore from '../../zustand/links';
 import { supabase } from '../../utils/supabase';
+import Button from '../../components/Button';
 
 interface links {
   id: number,
@@ -31,7 +32,8 @@ const DashboardSection = () => {
   useEffect(() => {
     setLoading(prevLoading => !prevLoading);
     const data = async () => {
-      const userId = (await supabase.auth.getSession()).data.session!.user.id;
+      const userId = (await supabase.auth.getUser()).data.user!.id
+      console.log(await supabase.auth.getSession())
 
       try {
         const { data: linksData, error } = await getLinksData(userId);
@@ -70,8 +72,6 @@ const DashboardSection = () => {
   // console.log(edit);
 
   const editDataHandler = async (id?: number) => {
-    
-
     if (!title || !url) {
       setFormError("Please fill the form correctly");
     }
@@ -144,6 +144,11 @@ const DashboardSection = () => {
     }
   }
 
+  const onGenerateClickHandler = async () => {
+    const username = (await supabase.auth.getUser()).data.user?.user_metadata.username;
+    window.open(`/links/${username}`, "_blank");
+  }
+
   const modalArea = document.querySelector("#addLinkModal");
   window.onclick = (e: Event) => {
     const target = e.target as Node;
@@ -160,8 +165,13 @@ const DashboardSection = () => {
           <DashboardCard linksLength={links?.length} />
         </div>
 
+        <div className="generate-links pt-8 w-40">
+          <Button text="Generate Links" type="button" onClick={onGenerateClickHandler}/>
+        </div>
+
         <div className="w-full flex flex-col items-center mt-16">
           <h1 className="text-2xl text-center font-semibold mb-8">Current Links</h1>
+
 
           <div className="links flex flex-col items-center gap-6 h-full w-full lg:max-w-[50rem]">
             {loading ? 

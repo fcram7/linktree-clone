@@ -7,22 +7,12 @@ import SignUp from '../pages/signup/Index';
 import { supabase } from '../utils/supabase';
 import Dashboard from '../pages/dashboard/Index';
 import { User } from '@supabase/supabase-js';
+import GeneratedLink from '../pages/generatedLink/Index';
 
 const RouteHandler = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // const checkUserLoggedIn = async () => {
-    //   const session = await supabase.auth.getSession();
-    //   if(session) {
-    //     const { data: { user }} = await supabase.auth.getUser();
-  
-    //     setLoggedInUser(user);
-    //   }
-    // }
-
-    // checkUserLoggedIn();
-
     const { data: authListener } = supabase.auth.onAuthStateChange((_e, session) => {
       setLoggedInUser(session?.user ?? null)
     });
@@ -34,6 +24,7 @@ const RouteHandler = () => {
     <>
       <Routes>
         <Route  path="/" element={<Home />}/>
+        <Route path="/links/:username" element={<GeneratedLink />}/>
         {loggedInUser ? (
           <Route path="/dashboard" element={<Dashboard />}/>
         ) : (

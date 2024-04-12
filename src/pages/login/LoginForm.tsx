@@ -33,7 +33,7 @@ const LoginForm = () => {
   }
 
   return ( 
-    <section className="login-section py-32 px-[7%] h-full flex lg:justify-center">
+    <section className="login-section py-40 px-[7%] h-full flex lg:justify-center">
       <div className="login-content h-full w-full flex flex-col items-center justify-center gap-4 lg:max-w-[50rem]">
         <form onSubmit={handleSubmit} className="form flex flex-col gap-4 w-[70%] border px-6 py-6 rounded-2xl border-neutral-400 shadow-2xl">
           <h1 className="text-3xl mb-4 text-center">Login</h1>
